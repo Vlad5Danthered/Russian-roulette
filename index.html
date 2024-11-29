@@ -53,12 +53,14 @@
     <script>
         let drum; // Массив барабана
         let currentIndex; // Текущая позиция в массиве
+        let surviveCount = 0; // Счетчик выживаний
 
         // Инициализация игры
         function initializeGame() {
             drum = Array(6).fill(0);
             drum[Math.floor(Math.random() * 6)] = 1;
             currentIndex = 0;
+            surviveCount = 0; // Сбрасываем счетчик
             document.getElementById('result').textContent = '';
             document.getElementById('shoot').disabled = false;
             document.getElementById('shoot').textContent = "Выстрелить";
@@ -68,10 +70,11 @@
         // Функция выстрела
         function spinRevolver() {
             if (drum[currentIndex] === 1) {
-                document.getElementById('result').textContent = "Выстрел! Вы проиграли!";
+                document.getElementById('result').textContent = `Выстрел! Вы проиграли! Вы выжили ${surviveCount} раз(а).`;
                 disableButton();
             } else {
-                document.getElementById('result').textContent = "Щелчок! Вам повезло!";
+                surviveCount++;
+                document.getElementById('result').textContent = `Щелчок! Вам повезло! Вы выжили ${surviveCount} раз(а).`;
                 currentIndex = (currentIndex + 1) % drum.length;
             }
         }
