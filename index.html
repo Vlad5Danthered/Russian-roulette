@@ -10,9 +10,6 @@
             transition: background-color 0.5s; /* Плавное изменение цвета */
 
         }
-        h1 {
-            color: #333;
-        }
         .block{
             font-family: Arial, sans-serif;
             padding: 20px;
@@ -59,8 +56,6 @@
 </head>
 <body>
     <div class="block">
-        <h1>Русская рулетка</h1>
-        <p>Нажмите на кнопку "Выстрелить" и проверьте, повезет ли вам!</p>
         <button onclick="spinRevolver()" id="shoot">Выстрелить</button>
         <div class="result" id="result"></div>
         <button id="restart" onclick="restartGame()">Рестарт</button>
@@ -106,14 +101,14 @@
         // Функция выстрела
         function spinRevolver() {
             if (drum[currentIndex] === 1) {
-                document.getElementById('result').textContent = `Выстрел! Вы проиграли! Вы выжили ${surviveCount} раз(а).`;
+                document.getElementById('result').textContent = `Смерть 1 из ${surviveCount}`;
                 document.body.style.backgroundColor = 'red'; // Меняем фон на красный
                 document.body.style.overflowY = 'none'
                 playGunshotSound(); // Звук выстрела
                 disableButton();
             } else {
                 surviveCount++;
-                document.getElementById('result').textContent = `Щелчок! Вам повезло! Вы выжили ${surviveCount} раз(а).`;
+                document.getElementById('result').textContent = `1 из ${surviveCount}`;
                 playClickSound(); // Звук щелчка
                 currentIndex = (currentIndex + 1) % drum.length;
             }
