@@ -6,14 +6,20 @@
     <title>Русская рулетка</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
             background-color: #f4f4f4;
+            transition: background-color 0.5s; /* Плавное изменение цвета */
+
         }
         h1 {
             color: #333;
+        }
+        .block{
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
         .result {
             margin-top: 20px;
@@ -21,13 +27,15 @@
             font-weight: bold;
         }
         button {
-            padding: 10px 20px;
+            padding: 20px 40px;
             font-size: 1.2rem;
             cursor: pointer;
             border: none;
             background-color: #007BFF;
             color: white;
             border-radius: 5px;
+            width: 200px;
+
             transition: background-color 0.3s;
         }
         button:hover {
@@ -41,14 +49,28 @@
         #restart:hover {
             background-color: #218838;
         }
+        img{
+            width: calc(100% - 100px);
+            position: absolute;
+            z-index: -1;
+            top: 0px;
+        }
     </style>
 </head>
 <body>
-    <h1>Русская рулетка</h1>
-    <p>Нажмите на кнопку "Выстрелить" и проверьте, повезет ли вам!</p>
-    <button onclick="spinRevolver()" id="shoot">Выстрелить</button>
-    <div class="result" id="result"></div>
-    <button id="restart" onclick="restartGame()">Рестарт</button>
+    <div class="block">
+        <h1>Русская рулетка</h1>
+        <p>Нажмите на кнопку "Выстрелить" и проверьте, повезет ли вам!</p>
+        <button onclick="spinRevolver()" id="shoot">Выстрелить</button>
+        <div class="result" id="result"></div>
+        <button id="restart" onclick="restartGame()">Рестарт</button>
+        <img src="revolver.png" alt="revolver">
+    </div>
+    <div class="image"></div>
+
+    <!-- Аудио элементы -->
+    <audio id="click-sound" src="click.mp3"></audio>
+    <audio id="gunshot-sound" src="gunshot.mp3"></audio>
 
     <script>
         let drum; // Массив барабана
@@ -62,19 +84,37 @@
             currentIndex = 0;
             surviveCount = 0; // Сбрасываем счетчик
             document.getElementById('result').textContent = '';
+            document.body.style.backgroundColor = '#f4f4f4'; // Сбрасываем цвет фона
             document.getElementById('shoot').disabled = false;
             document.getElementById('shoot').textContent = "Выстрелить";
             document.getElementById('restart').style.display = 'none';
+            document.body.style.overflowY = 'scroll'
+
+        }
+
+        // Воспроизведение звука
+        function playClickSound() {
+            const clickSound = document.getElementById('click-sound');
+            clickSound.play();
+        }
+
+        function playGunshotSound() {
+            const gunshotSound = document.getElementById('gunshot-sound');
+            gunshotSound.play();
         }
 
         // Функция выстрела
         function spinRevolver() {
             if (drum[currentIndex] === 1) {
                 document.getElementById('result').textContent = `Выстрел! Вы проиграли! Вы выжили ${surviveCount} раз(а).`;
+                document.body.style.backgroundColor = 'red'; // Меняем фон на красный
+                document.body.style.overflowY = 'none'
+                playGunshotSound(); // Звук выстрела
                 disableButton();
             } else {
                 surviveCount++;
                 document.getElementById('result').textContent = `Щелчок! Вам повезло! Вы выжили ${surviveCount} раз(а).`;
+                playClickSound(); // Звук щелчка
                 currentIndex = (currentIndex + 1) % drum.length;
             }
         }
