@@ -16,7 +16,6 @@
             height: calc(100vh - 60px);
             display: flex;
             flex-direction: column;
-            /* justify-content: flex-end; */
         }
         .result {
             margin-top: 20px;
@@ -76,9 +75,11 @@
         function kurook(){
             if(!kyrok){
                 kyrok = true;
+                document.getElementById('shoot').style.backgroundColor = "green";
             }
             else{
                 kyrok = false;
+                document.getElementById('shoot').style.backgroundColor = "#0056b3";
             }
             console.log(kyrok);
         }
@@ -97,7 +98,6 @@
             document.getElementById('shoot').textContent = "Предохранитель";
             document.getElementById('restart').style.display = 'none';
             document.body.style.overflowY = 'scroll'
-
         }
 
         // Воспроизведение звука
@@ -115,14 +115,14 @@
         function spinRevolver() {
             if(kyrok == true){
                 if (drum[currentIndex] === 1) {
-                    document.getElementById('result').textContent = `Смерть 6 из ${surviveCount}`;
+                    document.getElementById('result').textContent = `Смерть ${surviveCount} из 6`;
                     document.body.style.backgroundColor = 'red'; // Меняем фон на красный
                     document.body.style.overflowY = 'none'
                     playGunshotSound(); // Звук выстрела
                     disableButton();
                 } else {
                     surviveCount++;
-                    document.getElementById('result').textContent = `6 из ${surviveCount}`;
+                    document.getElementById('result').textContent = `${surviveCount} из 6`;
                     playClickSound(); // Звук щелчка
                     currentIndex = (currentIndex + 1) % drum.length;
                 }
@@ -138,6 +138,8 @@
 
         // Перезапуск игры
         function restartGame() {
+            kyrok = false;
+            document.getElementById('shoot').style.backgroundColor = "#0056b3";
             initializeGame();
         }
 
