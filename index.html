@@ -16,7 +16,7 @@
             height: calc(100vh - 60px);
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            /* justify-content: flex-end; */
         }
         .result {
             margin-top: 20px;
@@ -31,7 +31,8 @@
             background-color: #007BFF;
             color: white;
             border-radius: 5px;
-            width: 200px;
+            width: 250px;
+            z-index: 2;
 
             transition: background-color 0.3s;
         }
@@ -49,17 +50,17 @@
         img{
             width: calc(100% - 100px);
             position: absolute;
-            z-index: -1;
+            z-index: 1;
             top: 0px;
         }
     </style>
 </head>
 <body>
     <div class="block">
-        <button onclick="spinRevolver()" id="shoot">Выстрелить</button>
+        <button onclick="kurook()" id="shoot">Предохранитель</button>
         <div class="result" id="result"></div>
         <button id="restart" onclick="restartGame()">Рестарт</button>
-        <img src="revolver.png" alt="revolver">
+        <img id="image" src="revolver.png" alt="revolver">
     </div>
     <div class="image"></div>
 
@@ -71,7 +72,19 @@
         let drum; // Массив барабана
         let currentIndex; // Текущая позиция в массиве
         let surviveCount = 0; // Счетчик выживаний
-
+        let kyrok = false;
+        function kurook(){
+            if(!kyrok){
+                kyrok = true;
+            }
+            else{
+                kyrok = false;
+            }
+            console.log(kyrok);
+        }
+        document.getElementById("image").addEventListener("click", function(){
+            spinRevolver();
+        })
         // Инициализация игры
         function initializeGame() {
             drum = Array(6).fill(0);
@@ -81,7 +94,7 @@
             document.getElementById('result').textContent = '';
             document.body.style.backgroundColor = '#f4f4f4'; // Сбрасываем цвет фона
             document.getElementById('shoot').disabled = false;
-            document.getElementById('shoot').textContent = "Выстрелить";
+            document.getElementById('shoot').textContent = "Предохранитель";
             document.getElementById('restart').style.display = 'none';
             document.body.style.overflowY = 'scroll'
 
@@ -100,17 +113,19 @@
 
         // Функция выстрела
         function spinRevolver() {
-            if (drum[currentIndex] === 1) {
-                document.getElementById('result').textContent = `Смерть 1 из ${surviveCount}`;
-                document.body.style.backgroundColor = 'red'; // Меняем фон на красный
-                document.body.style.overflowY = 'none'
-                playGunshotSound(); // Звук выстрела
-                disableButton();
-            } else {
-                surviveCount++;
-                document.getElementById('result').textContent = `1 из ${surviveCount}`;
-                playClickSound(); // Звук щелчка
-                currentIndex = (currentIndex + 1) % drum.length;
+            if(kyrok == true){
+                if (drum[currentIndex] === 1) {
+                    document.getElementById('result').textContent = `Смерть 6 из ${surviveCount}`;
+                    document.body.style.backgroundColor = 'red'; // Меняем фон на красный
+                    document.body.style.overflowY = 'none'
+                    playGunshotSound(); // Звук выстрела
+                    disableButton();
+                } else {
+                    surviveCount++;
+                    document.getElementById('result').textContent = `6 из ${surviveCount}`;
+                    playClickSound(); // Звук щелчка
+                    currentIndex = (currentIndex + 1) % drum.length;
+                }
             }
         }
 
